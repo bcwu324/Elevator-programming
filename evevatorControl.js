@@ -243,6 +243,8 @@ let passengers = [
 ];
 // 被release的乘客：
 let releasedPassengers = [];
+// 完成搭電梯的乘客：
+let finishedPassengers = [];
 
 // 定義各函式：///////////////////////////////////////////////////////////////////////////////////
 // 1.每秒release一位乘客：(說明：每秒將passengers陣列的元素逐一加至releasedPassengers陣列)
@@ -256,15 +258,8 @@ passengers.forEach((item, index) => {
   }, index * passengerInAndOutTime * 1000);
 });
 
-// 2.只要有releasedPassenger未搭到電梯，每秒呼叫電梯一次：
-setInterval(() => {
-  if (releasedPassengers.length > 0) {
-    requerstElevator();
-  }
-}, 1000);
-
-// 3.電梯使用LOOK演算法，初始值在一樓，且每秒移動一層：
-// 3.1當電梯在1樓時，每秒往上一層：
+// 2.電梯使用LOOK演算法，初始值在一樓，且每秒移動一層：
+// 2.1當電梯在1樓時，每秒往上一層：
 setInterval(() => {
   if (elevators[0].currentFloor < 10 && elevators[0].direction == 1) {
     elevators[0].currentFloor++;
@@ -273,7 +268,7 @@ setInterval(() => {
   }
 }, 1000);
 
-// 3.2當電梯在10樓時，電梯方向變向下; 當電梯在1樓時，電梯方向變向上：
+// 2.2當電梯在10樓時，電梯方向變向下; 當電梯在1樓時，電梯方向變向上：
 setInterval(() => {
   if (elevators[0].currentFloor == 10) {
     elevators[0].direction = -1;
@@ -287,9 +282,28 @@ setTimeout(() => {
   console.log(elevators[0].currentFloor);
 }, 15000);
 
-// 4..被release的乘客在呼叫電梯之後，滿足以下條件時會搭電梯：(1)其中一台電梯未滿5人。(2)電梯的行進方向和乘客的目的方向相同。(3)電梯的目前所在樓層不等於乘客所在樓層的正負1範圍內時。(4)滿足上述三個條件時，搭乘較近的電梯
+// 3.被release的乘客在呼叫電梯之後，滿足以下條件時會搭電梯：(1)其中一台電梯未滿5人。(2)電梯的行進方向和乘客的目的方向相同。(3)電梯的目前所在樓層不等於乘客所在樓層的正負1範圍內時。(4)滿足上述三個條件時，搭乘較近的電梯
 setInterval(() => {
-  releasedPassengers.forEach((item, index) => {});
+  releasedPassengers.forEach((item, index) => {
+    if (
+      item.passengerInitialFloor == elevators[0].currentFloor &&
+      elevators[0].passengerInElevator.length < 5
+    ) {
+      releasedPassengers.splice(index, 1);
+      elevators[0].passengerInElevator.push(item);
+      // console.log(elevators[0].passengerInElevator);
+      // console.log(releasedPassengers);
+    }
+  });
 }, 1000);
 
-// 2.被release的乘客滿足以下條件時會搭電梯：(1)有一台電梯未滿5人。(2)電梯的行進方向和乘客的目的方向相同。(3)電梯的目前所在樓層不等於乘客所在樓層的正負1範圍內時。(4)滿足上述三個條件時，搭乘較近的電梯
+// 4.電梯內的乘客到達目的地之後，離開電梯，至finishedPassengers陣列：
+setInterval(() => {
+  elevators[0].passengerInElevator.forEach((item, index) => {
+    if (item.passengerDestinationFloor == elevators[0].currentFloor) {
+      elevators[0].passengerInElevator.splice(index, 1);
+      finishedPassengers.push(item);
+      console.log(finishedPassengers);
+    }
+  });
+}, 1000);
