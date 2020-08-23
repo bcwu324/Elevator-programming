@@ -252,9 +252,6 @@ passengers.forEach((item, index) => {
   setTimeout(function () {
     passengers.shift(item);
     releasedPassengers.push(item);
-    // console.log(passengers);
-    // console.log(releasedPassengers.length);
-    // takeElevator();
   }, index * passengerInAndOutTime * 1000);
 });
 
@@ -277,10 +274,10 @@ setInterval(() => {
   }
 }, 1000);
 
-setTimeout(() => {
-  console.log(elevators[0].direction);
-  console.log(elevators[0].currentFloor);
-}, 15000);
+// setTimeout(() => {
+//   console.log(elevators[0].direction);
+//   console.log(elevators[0].currentFloor);
+// }, 15000);
 
 // 3.被release的乘客在呼叫電梯之後，滿足以下條件時會搭電梯：(1)其中一台電梯未滿5人。(2)電梯的行進方向和乘客的目的方向相同。(3)電梯的目前所在樓層不等於乘客所在樓層的正負1範圍內時。(4)滿足上述三個條件時，搭乘較近的電梯
 setInterval(() => {
@@ -306,4 +303,17 @@ setInterval(() => {
       console.log(finishedPassengers);
     }
   });
+}, 1000);
+
+// 5.parse passengers:
+setInterval(() => {
+  document.querySelector(".passengers").innerHTML = JSON.stringify(passengers);
+  document.querySelector(".releasedPassengers").innerHTML = JSON.stringify(
+    releasedPassengers
+  );
+  document.querySelector(".elevatorA").innerHTML = JSON.stringify(elevators[0]);
+  // document.querySelector(".elevatorB").innerHTML = JSON.stringify(elevatorB);
+  document.querySelector(".finishedPassengers").innerHTML = JSON.stringify(
+    finishedPassengers
+  );
 }, 1000);

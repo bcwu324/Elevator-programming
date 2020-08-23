@@ -3,9 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
     <title>Elevator programming</title>
+    <style>
+      .frame {
+        border: 1px solid black;
+        display: block;
+        /* flex-wrap: wrap; */
+      }
+      .block {
+        border: 1px solid blue;
+        /* height: 300px; */
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
+    <div class="frame">
+      <h1>Passengers:</h1>
+      <div class="block passengers"></div>
+      <h1>releasedPassengers:</h1>
+      <div class="block releasedPassengers"></div>
+      <h1>elevatorA:</h1>
+      <div class="block elevatorA"></div>
+      <h1>elevatorB:</h1>
+      <div class="block elevatorB"></div>
+      <h1>finishedPassengers:</h1>
+      <div class="block finishedPassengers"></div>
+    </div>
     <script src="./evevatorControl.js"></script>
   </body>
 </html>
