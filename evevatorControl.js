@@ -19,6 +19,8 @@ const passengerInitialFloor = Math.floor(1 + Math.random() * floorAmount);
 const passengerDestinationFloor = Math.floor(1 + Math.random() * floorAmount);
 // 7. 模擬放進 40 人次
 const humanAmount = 40;
+// 8.計時器
+let stopWatch = "";
 
 // 將題目所提到的實體設定成物件：//////////////////////////////////////////////////////////////////
 // 2台電梯：
@@ -32,8 +34,8 @@ let elevators = [
   },
   {
     name: "elevaorB",
-    currentFloor: 1,
-    direction: 1,
+    currentFloor: 10,
+    direction: -1,
     // 1==upward,0==noMove,-1==downward
     passengerInElevator: [],
   },
@@ -258,49 +260,74 @@ passengers.forEach((item, index) => {
 // 2.電梯使用LOOK演算法，初始值在一樓，且每秒移動一層：
 // 2.1當電梯在1樓時，每秒往上一層：
 setInterval(() => {
+  // elevatorA:
   if (elevators[0].currentFloor < 10 && elevators[0].direction == 1) {
     elevators[0].currentFloor++;
   } else if (elevators[0].currentFloor > 1 && elevators[0].direction == -1) {
     elevators[0].currentFloor--;
   }
+  // elevatorB:
+  if (elevators[1].currentFloor < 10 && elevators[1].direction == 1) {
+    elevators[1].currentFloor++;
+  } else if (elevators[1].currentFloor > 1 && elevators[1].direction == -1) {
+    elevators[1].currentFloor--;
+  }
 }, 1000);
 
 // 2.2當電梯在10樓時，電梯方向變向下; 當電梯在1樓時，電梯方向變向上：
 setInterval(() => {
+  // elevatorA:
   if (elevators[0].currentFloor == 10) {
     elevators[0].direction = -1;
   } else if (elevators[0].currentFloor == 1) {
     elevators[0].direction = 1;
   }
+  // elevatorB:
+  if (elevators[1].currentFloor == 10) {
+    elevators[1].direction = -1;
+  } else if (elevators[1].currentFloor == 1) {
+    elevators[1].direction = 1;
+  }
 }, 1000);
 
-// setTimeout(() => {
-//   console.log(elevators[0].direction);
-//   console.log(elevators[0].currentFloor);
-// }, 15000);
-
-// 3.被release的乘客在呼叫電梯之後，滿足以下條件時會搭電梯：(1)其中一台電梯未滿5人。(2)電梯的行進方向和乘客的目的方向相同。(3)電梯的目前所在樓層不等於乘客所在樓層的正負1範圍內時。(4)滿足上述三個條件時，搭乘較近的電梯
+// 3.被release的乘客在呼叫電梯之後，滿足以下條件時會搭電梯：(1)其中一台電梯未滿5人。(2)電梯的樓層和乘客的所在樓層相同。(3)電梯A滿時乘客搭電梯B
 setInterval(() => {
   releasedPassengers.forEach((item, index) => {
+    // elevatorA:
     if (
       item.passengerInitialFloor == elevators[0].currentFloor &&
       elevators[0].passengerInElevator.length < 5
     ) {
       releasedPassengers.splice(index, 1);
       elevators[0].passengerInElevator.push(item);
-      // console.log(elevators[0].passengerInElevator);
-      // console.log(releasedPassengers);
+    }
+    // elevatorB:
+    if (
+      item.passengerInitialFloor == elevators[1].currentFloor &&
+      elevators[1].passengerInElevator.length < 5
+    ) {
+      releasedPassengers.splice(index, 1);
+      elevators[1].passengerInElevator.push(item);
     }
   });
 }, 1000);
 
 // 4.電梯內的乘客到達目的地之後，離開電梯，至finishedPassengers陣列：
 setInterval(() => {
+  // elevatorA:
   elevators[0].passengerInElevator.forEach((item, index) => {
     if (item.passengerDestinationFloor == elevators[0].currentFloor) {
       elevators[0].passengerInElevator.splice(index, 1);
       finishedPassengers.push(item);
-      console.log(finishedPassengers);
+      // console.log(finishedPassengers);
+    }
+  });
+  // elevatorB:
+  elevators[1].passengerInElevator.forEach((item, index) => {
+    if (item.passengerDestinationFloor == elevators[1].currentFloor) {
+      elevators[1].passengerInElevator.splice(index, 1);
+      finishedPassengers.push(item);
+      // console.log(finishedPassengers);
     }
   });
 }, 1000);
@@ -312,8 +339,16 @@ setInterval(() => {
     releasedPassengers
   );
   document.querySelector(".elevatorA").innerHTML = JSON.stringify(elevators[0]);
-  // document.querySelector(".elevatorB").innerHTML = JSON.stringify(elevatorB);
+  document.querySelector(".elevatorB").innerHTML = JSON.stringify(elevators[1]);
   document.querySelector(".finishedPassengers").innerHTML = JSON.stringify(
     finishedPassengers
   );
+}, 1000);
+
+// 計時：
+setInterval(() => {
+  if (finishedPassengers.length < 40) {
+    stopWatch++;
+    document.querySelector(".stopWatch").innerHTML = stopWatch;
+  }
 }, 1000);

@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css" />
     <title>Elevator programming</title>
     <style>
       .frame {
@@ -16,19 +15,26 @@
         /* height: 300px; */
         width: 100%;
       }
+      .stopWatch {
+        color: red;
+        font-size: 30px;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
     <div class="frame">
-      <h1>Passengers:</h1>
+      <h1 style="color: red;">完成40人次搭電梯歷時(秒):</h1>
+      <div class="block stopWatch"></div>
+      <h1>尚未允許可以搭電梯的乘客:</h1>
       <div class="block passengers"></div>
-      <h1>releasedPassengers:</h1>
+      <h1>可以搭電梯的乘客:</h1>
       <div class="block releasedPassengers"></div>
-      <h1>elevatorA:</h1>
+      <h1>電梯A:</h1>
       <div class="block elevatorA"></div>
-      <h1>elevatorB:</h1>
+      <h1>電梯B:</h1>
       <div class="block elevatorB"></div>
-      <h1>finishedPassengers:</h1>
+      <h1>完成搭電梯的乘客:</h1>
       <div class="block finishedPassengers"></div>
     </div>
     <script src="./evevatorControl.js"></script>
